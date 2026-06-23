@@ -1,0 +1,35 @@
+name: Threads 自動投稿（毎朝9時）
+
+on:
+  schedule:
+      - cron: '0 0 * * *'
+        workflow_dispatch:
+
+        jobs:
+          post:
+              runs-on: ubuntu-latest
+                  permissions:
+                        contents: write
+
+                            steps:
+                                  - name: リポジトリをチェックアウト
+                                          uses: actions/checkout@v4
+
+                                                - name: Python セットアップ
+                                                        uses: actions/setup-python@v5
+                                                                with:
+                                                                          python-version: '3.11'
+
+                                                                                - name: ライブラリインストール
+                                                                                        run: pip install requests
+
+                                                                                              - name: Threads に投稿
+                                                                                                      run: python threads_auto_post.py
+                                                                                                      
+                                                                                                            - name: 進捗を保存
+                                                                                                                    run: |
+                                                                                                                              git config user.email "bot@github.com"
+                                                                                                                                        git config user.name "Threads Bot"
+                                                                                                                                                  git add progress.json
+                                                                                                                                                            git diff --staged --quiet || git commit -m "進捗更新"
+                                                                                                                                                                      git push
