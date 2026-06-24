@@ -1,4 +1,11 @@
 {
   "day": 0,
-  "total_days": 0
+  "total_days": 0,
+  "last_posted": {
+    "slot": "朝",
+    "day": 1,
+    "id": 1,
+    "theme": "お金と意志力",
+    "timestamp": "2026-06-25T07:40:36.312803+09:00"
+  }
 }
