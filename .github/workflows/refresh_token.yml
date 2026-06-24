@@ -1,0 +1,28 @@
+name: Threads トークン自動更新（毎月）
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'  # 毎月1日 0:00 UTC（= 9:00 JST）
+  workflow_dispatch:      # 手動実行も可
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: ライブラリインストール
+        run: pip install requests PyNaCl
+
+      - name: トークン更新
+        env:
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: python refresh_token.py
