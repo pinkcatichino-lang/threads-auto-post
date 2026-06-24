@@ -1,9 +1,11 @@
-name: Threads 自動投稿（毎朝9時）
+name: Threads 自動投稿（朝6時・昼12時・夜20時）
 
 on:
   schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch:
+    - cron: '0 21 * * *'   # 朝 6:00 JST (= UTC 前日21:00)
+    - cron: '0 3 * * *'    # 昼 12:00 JST (= UTC 03:00)
+    - cron: '0 11 * * *'   # 夜 20:00 JST (= UTC 11:00)
+  workflow_dispatch:        # 手動実行も可
 
 jobs:
   post:
@@ -24,6 +26,8 @@ jobs:
         run: pip install requests
 
       - name: Threads に投稿
+        env:
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
         run: python threads_auto_post.py
 
       - name: 進捗を保存
