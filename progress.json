@@ -1,10 +1,4 @@
 {
-  "next_id": 3,
-  "total_posted": 2,
-  "last_posted": {
-    "id": 2,
-    "theme": "怒鳴るママが変わった",
-    "timestamp": "2026-06-23T14:07:09.624752",
-    "dry_run": false
-  }
+  "day": 0,
+  "total_days": 0
 }
