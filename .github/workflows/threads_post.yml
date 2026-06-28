@@ -4,8 +4,13 @@ on:
   schedule:
     - cron: '0 21 * * *'   # 朝 6:00 JST (= UTC 前日21:00)
     - cron: '0 3 * * *'    # 昼 12:00 JST (= UTC 03:00)
-    - cron: '0 11 * * *'   # 夜 20:00 JST (= UTC 11:00)
-  workflow_dispatch:        # 手動実行も可
+    - cron: '0 11 * * *'   # 夜20:00 JST (= UTC 11:00)
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: '投稿スロット (朝/昼/夜)'
+        required: false
+        default: ''
 
 jobs:
   post:
@@ -24,6 +29,18 @@ jobs:
 
       - name: ライブラリインストール
         run: pip install requests
+
+      - name: スロット判定
+        run: |
+          if [ -n "${{ github.event.inputs.slot }}" ]; then
+            echo "SLOT=${{ github.event.inputs.slot }}" >> $GITHUB_ENV
+          elif [ "${{ github.event.schedule }}" = "0 21 * * *" ]; then
+            echo "SLOT=朝" >> $GITHUB_ENV
+          elif [ "${{ github.event.schedule }}" = "0 3 * * *" ]; then
+            echo "SLOT=昼" >> $GITHUB_ENV
+          elif [ "${{ github.event.schedule }}" = "0 11 * * *" ]; then
+            echo "SLOT=夜" >> $GITHUB_ENV
+          fi
 
       - name: Threads に投稿
         env:
