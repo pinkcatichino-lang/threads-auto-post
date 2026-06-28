@@ -42,14 +42,17 @@ POST_INTERVAL = 5  # 投稿間の待機秒数
 JST = timezone(timedelta(hours=9))
 
 def get_slot():
-    """現在のJST時刻から投稿スロット（朝/昼/夜）を返す"""
+    """SLOT環境変数があればそれを使う（GitHub Actions遅延対策）"""
+    env_slot = os.environ.get("SLOT", "")
+    if env_slot in ("朝", "昼", "夜"):
+        return env_slot
     now_jst = datetime.now(JST)
     hour = now_jst.hour
     if 3 <= hour < 9:      # 3〜8時 → 朝（6時投稿）
         return "朝"
-    elif 9 <= hour < 19:   # 9〜16時 → 昼（12時投稿）
+    elif 9 <= hour < 19:   # 9〜18時 → 昼（12時投稿）
         return "昼"
-    else:                   # 17〜翌3時 → 夜（20時投稿）
+    else:                   # 19〜翌3時 → 夜（20時投稿）
         return "夜"
 
 
