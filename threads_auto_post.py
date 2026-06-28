@@ -107,7 +107,8 @@ def publish_thread(creation_id):
 def post_triple(post_data, dry_run=False):
     """3段投稿を実行する"""
     theme = post_data["theme"]
-    texts = [post_data["post1"], post_data["post2"], post_data["post3"]]
+    hashtag = post_data.get("hashtag", "")
+    texts = [post_data["post1"], post_data["post2"], post_data["post3"] + ("\n\n" + hashtag if hashtag else "")]
     labels = ["メイン投稿", "返信1（2段目）", "返信2（3段目）"]
 
     print(f"\n[テーマ: {theme}]")
